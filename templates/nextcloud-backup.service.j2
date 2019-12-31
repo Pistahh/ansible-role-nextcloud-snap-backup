@@ -1,0 +1,34 @@
+[Unit]
+Description=NextCloud backup
+
+[Service]
+Type=oneshot
+ExecStart="{{ ncbackup_ncdir }}/backup.sh"
+
+{%- if ncbackup_lvm_vg is defined %}
+
+Environment=NCB_VG={{ ncbackup_lvm_vg }}
+{% endif %}
+
+{%- if ncbackup_lvm_lv is defined %}
+Environment=NCB_LV={{ ncbackup_lvm_lv }}
+{% endif %}
+
+{%- if ncbackup_duplicity_ncdir is defined %}
+Environment=NCB_NCDIR={{ ncbackup_duplicity_ncdir }}
+{% endif %}
+
+{%- if ncbackup_duplicity_dest is defined %}
+Environment=NCB_DUPLICITY_DEST={{ ncbackup_duplicity_dest }}
+{% endif %}
+
+{%- if ncbackup_duplicity_ssh_options is defined %}
+Environment=NCB_DUPLICITY_SSH_OPTIONS={{ ncbackup_duplicity_ssh_options | quote }}
+{%- endif %}
+
+Environment=PASSPHRASE={{ ncbackup_duplicity_passphrase }}
+
+User=root
+Nice=19
+IOSchedulingClass=idle
+IOSchedulingPriority=7

@@ -1,0 +1,19 @@
+---
+
+dependencies: []
+
+galaxy_info:
+  author: pistahh
+  description: NextCloud (snap) backups with duplicity
+  license: MIT
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  - name: Debian
+    versions:
+    - all
+
+  galaxy_tags:
+  - nextcloud
+  - backup

@@ -1,0 +1,8 @@
+[Unit]
+Description=NextCloud backup timer
+
+[Timer]
+OnCalendar={{ ncbackup_timer }}
+
+[Install]
+WantedBy=timers.target

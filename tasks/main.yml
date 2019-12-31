@@ -1,0 +1,38 @@
+- name: Copy backup script
+  copy:
+    src: files/backup.sh
+    dest: "{{ ncbackup_ncdir }}/backup.sh"
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Copy systemd service config file
+  template:
+    src: nextcloud-backup.service.j2
+    dest: /etc/systemd/system/nextcloud-backup.service
+    owner: root
+    group: root
+    mode: '0600'
+  register: systemd_service_config
+
+- name: Copy systemd timer config file
+  template:
+    src: "nextcloud-backup.timer.j2"
+    dest: /etc/systemd/system/nextcloud-backup.timer
+    owner: root
+    group: root
+    mode: '0600'
+  when: ncbackup_timer is defined
+  register: systemd_timer_config
+
+- name: Reload systemd config
+  systemd:
+    daemon_reload: yes
+  when: systemd_service_config is changed or systemd_timer_config is changed
+
+- name: Enable backup timer
+  systemd:
+    name: nextcloud-backup.timer
+    enabled: yes
+    state: started
+  when: ncbackup_timer is defined
